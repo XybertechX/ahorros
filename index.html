@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ahorros XyberTechX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <aside class="side">
+      <div class="brand">
+        <div class="brand-mark">X</div>
+        <div>
+          <h1>Ahorros</h1>
+          <span>XyberTechX</span>
+        </div>
+      </div>
+
+      <nav class="period-tabs" aria-label="Periodo del tablero">
+        <button class="active" type="button" data-period="today">Hoy</button>
+        <button type="button" data-period="month">Este mes</button>
+        <button type="button" data-period="report">Reporte de mes</button>
+        <button type="button" data-period="all">Historico</button>
+      </nav>
+
+      <section class="month-report">
+        <label for="reporteMes">Mes del reporte</label>
+        <input id="reporteMes" type="month" min="2026-05">
+      </section>
+
+      <section class="target-panel">
+        <label for="metaInput">Meta principal</label>
+        <div class="money-input">
+          <span>S/</span>
+          <input id="metaInput" type="number" min="0" step="10" value="5000">
+        </div>
+        <button id="guardarMeta" type="button">Guardar meta</button>
+      </section>
+
+      <section class="status-box">
+        <strong>Saldo calculado</strong>
+        <span>Se actualiza con ventas, extras, sueldo y gastos aplicados.</span>
+      </section>
+
+      <section class="status-box" id="conexionEstado">
+        Conectando con ventas y finanzas...
+      </section>
+    </aside>
+
+    <section class="content">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">Servicios, materiales y reparto</span>
+          <h2>Control de plata del taller</h2>
+          <p>Productos del inventario con costo real, servicios por Yape/efectivo y reparto: 27% materiales, 27% reinversion base y 46% ganancia.</p>
+        </div>
+        <a class="system-link" href="/xybertechx-system/reportes.html">Ver reporte de ventas</a>
+      </header>
+
+      <section class="hero-grid">
+        <article class="hero-metric">
+          <span>Ganancia real del periodo</span>
+          <strong>S/ <span id="gananciaLimpia">0.00</span></strong>
+          <small>Ganancia de productos + ingresos de servicios, menos gastos aplicados.</small>
+          <div class="mini-flow">
+            <div>
+              <span>Productos</span>
+              <strong>S/ <b id="ventasTotal">0.00</b></strong>
+            </div>
+            <div>
+              <span>Inversion base</span>
+              <strong>S/ <b id="gastosTotal">0.00</b></strong>
+            </div>
+            <div>
+              <span>Gastos aplicados</span>
+              <strong>S/ <b id="inversionTotal">0.00</b></strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="wallet-card">
+          <span>Ahorro actual</span>
+          <strong>S/ <span id="ahorroActual">0.00</span></strong>
+          <small>Calculado automatico. <span id="avanceMeta">0%</span> de la meta.</small>
+          <div class="progress-track">
+            <div id="barraMeta" class="progress-fill"></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="summary-grid">
+        <article>
+          <span>Servicios ingresados</span>
+          <strong>S/ <span id="bolsaTaller">0.00</span></strong>
+          <small>Programas, mantenimiento e instalacion</small>
+        </article>
+        <article>
+          <span>Materiales 27%</span>
+          <strong>S/ <span id="bolsaEmergencia">0.00</span></strong>
+          <small>Para pasta termica, insumos y taller</small>
+        </article>
+        <article>
+          <span>Reinversion base 27%</span>
+          <strong>S/ <span id="sueldoLibre">0.00</span></strong>
+          <small>Base del taller para seguir creciendo</small>
+        </article>
+        <article>
+          <span>Liquido servicios 46%</span>
+          <strong>S/ <span id="gananciaServicios">0.00</span></strong>
+          <small>Tu parte directa del servicio</small>
+        </article>
+        <article>
+          <span>Ganancia total</span>
+          <strong>S/ <span id="utilidadTotal">0.00</span></strong>
+          <small id="ventasCount">Productos + materiales + reinversion + liquido</small>
+        </article>
+      </section>
+
+      <section class="salary-band">
+        <article>
+          <span>Sueldo recibido</span>
+          <strong>S/ <b id="sueldoRecibido">0.00</b></strong>
+          <small>Base para administrar tu pago.</small>
+        </article>
+        <article>
+          <span>Viveres 35%</span>
+          <strong>S/ <b id="sueldoViveres">0.00</b></strong>
+          <small>Comida y casa.</small>
+        </article>
+        <article>
+          <span>Emergencia 20%</span>
+          <strong>S/ <b id="sueldoEmergenciaCalc">0.00</b></strong>
+          <small>Intocable salvo urgencia.</small>
+        </article>
+        <article>
+          <span>Ahorro 20%</span>
+          <strong>S/ <b id="sueldoAhorroCalc">0.00</b></strong>
+          <small>Meta personal / BBVA.</small>
+        </article>
+        <article>
+          <span>Lujos y golosinas 10%</span>
+          <strong>S/ <b id="sueldoLujos">0.00</b></strong>
+          <small>Sin culpa, pero medido.</small>
+        </article>
+        <article>
+          <span>Libre 15%</span>
+          <strong>S/ <b id="sueldoLibreCalc">0.00</b></strong>
+          <small>Despues de deudas y pagos.</small>
+        </article>
+      </section>
+
+      <section class="work-grid">
+        <article class="panel today-panel">
+          <div class="panel-head">
+            <div>
+              <h3>Hoy: productos y servicios</h3>
+              <p>Productos vendidos con costo real, servicios cobrados y gastos restados de donde corresponde.</p>
+            </div>
+          </div>
+          <div class="today-ledger">
+            <div>
+              <span>Productos hoy</span>
+              <strong>S/ <b id="ventasHoy">0.00</b></strong>
+            </div>
+            <div>
+              <span>Servicios hoy</span>
+              <strong>S/ <b id="utilidadHoy">0.00</b></strong>
+            </div>
+            <div>
+              <span>Gastos hoy</span>
+              <strong class="danger">S/ <b id="gastosHoy">0.00</b></strong>
+            </div>
+            <div>
+              <span>Queda hoy</span>
+              <strong>S/ <b id="quedaHoy">0.00</b></strong>
+            </div>
+          </div>
+          <ul id="ventasHoyLista" class="activity-list compact"></ul>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Ingreso de servicio</h3>
+              <p>Para pagos por Yape, efectivo o servicios que no estan en ventas.</p>
+            </div>
+          </div>
+          <form id="ingresoForm" class="data-form">
+            <input id="ingresoId" type="hidden">
+            <label>
+              Servicio
+              <input id="ingresoConcepto" type="text" maxlength="80" placeholder="Ej. programa, mantenimiento, pasta termica">
+            </label>
+            <div class="form-row">
+              <label>
+                Monto
+                <input id="ingresoMonto" type="number" min="0.1" step="0.1" placeholder="S/ 40">
+              </label>
+              <label>
+                Metodo
+                <select id="ingresoMetodo">
+                  <option>Yape</option>
+                  <option>Efectivo</option>
+                  <option>Plin</option>
+                  <option>Transferencia</option>
+                  <option>Otro</option>
+                </select>
+              </label>
+            </div>
+            <div class="form-row">
+              <label>
+                Categoria
+                <select id="ingresoCategoria">
+                  <option>Programa</option>
+                  <option>Mantenimiento</option>
+                  <option>Pasta termica</option>
+                  <option>Reparacion</option>
+                  <option>Otro servicio</option>
+                </select>
+              </label>
+              <label>
+                Fecha
+                <input id="ingresoFecha" type="date">
+              </label>
+            </div>
+            <button type="submit" id="guardarIngreso">Guardar ingreso</button>
+            <button type="button" class="ghost-button" id="cancelarIngreso">Cancelar edicion</button>
+          </form>
+        </article>
+      </section>
+
+      <section class="work-grid three-cols">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Movimiento aplicado</h3>
+              <p>Registra salidas o ingresos extra y elige si afectan producto, servicio o general.</p>
+            </div>
+          </div>
+          <form id="gastoForm" class="data-form">
+            <input id="gastoId" type="hidden">
+            <label>
+              Concepto
+              <input id="gastoConcepto" type="text" maxlength="80" placeholder="Ej. materiales, reinversion, pasaje">
+            </label>
+            <div class="form-row">
+              <label>
+                Monto
+                <input id="gastoMonto" type="number" min="0.1" step="0.1" placeholder="S/ 3.50">
+              </label>
+              <label>
+                Movimiento
+                <select id="gastoTipo">
+                  <option value="material">Aporte a materiales</option>
+                  <option value="inversion">Reinversion taller</option>
+                  <option value="ganancia_servicio">Extra a ganancia servicios</option>
+                  <option value="ingreso">Ingreso extra</option>
+                  <option value="gasto">Gasto diario</option>
+                </select>
+              </label>
+            </div>
+            <div class="form-row">
+              <label>
+                Aplica a
+                <select id="gastoArea">
+                  <option value="producto">Producto vendido</option>
+                  <option value="servicio">Servicio tecnico</option>
+                  <option value="general">General</option>
+                </select>
+              </label>
+              <label>
+                Categoria
+                <select id="gastoCategoria">
+                  <option>Material</option>
+                  <option>Pasta termica</option>
+                  <option>Pasaje</option>
+                  <option>Comida</option>
+                  <option>Bebida</option>
+                  <option>Taller</option>
+                  <option>Deuda</option>
+                  <option>Otro</option>
+                </select>
+              </label>
+              <label>
+                Fecha
+                <input id="gastoFecha" type="date">
+              </label>
+            </div>
+            <button type="submit" id="guardarGasto">Guardar movimiento</button>
+            <button type="button" class="ghost-button" id="cancelarGasto">Cancelar edicion</button>
+          </form>
+        </article>
+      </section>
+
+      <section class="work-grid">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Administrar sueldo</h3>
+              <p>Para sueldos externos: deudas, pendientes, emergencia y dinero libre.</p>
+            </div>
+          </div>
+          <form id="sueldoForm" class="data-form">
+            <input id="sueldoId" type="hidden">
+            <div class="form-row">
+              <label>
+                Sueldo
+                <input id="sueldoMonto" type="number" min="0.1" step="0.1" placeholder="S/ 1000">
+              </label>
+              <label>
+                Fecha
+                <input id="sueldoFecha" type="date">
+              </label>
+            </div>
+            <div class="form-row">
+              <label>
+                Deudas
+                <input id="sueldoDeudas" type="number" min="0" step="0.1" value="0">
+              </label>
+              <label>
+                Pagos pendientes
+                <input id="sueldoPendientes" type="number" min="0" step="0.1" value="0">
+              </label>
+            </div>
+            <div class="form-row">
+              <label>
+                Alquiler
+                <input id="sueldoAlquiler" type="number" min="0" step="0.1" value="0">
+              </label>
+              <label>
+                Compras inesperadas
+                <input id="sueldoInesperados" type="number" min="0" step="0.1" value="0">
+              </label>
+            </div>
+            <div class="salary-preview" id="sueldoPreview">
+              <div><span>Resta para repartir</span><strong>S/ 0.00</strong></div>
+              <div><span>Viveres 35%</span><strong>S/ 0.00</strong></div>
+              <div><span>Emergencia 20%</span><strong>S/ 0.00</strong></div>
+              <div><span>Ahorro 20%</span><strong>S/ 0.00</strong></div>
+              <div><span>Lujos 10%</span><strong>S/ 0.00</strong></div>
+              <div><span>Libre 15%</span><strong>S/ 0.00</strong></div>
+            </div>
+            <label>
+              Nota
+              <input id="sueldoNota" type="text" maxlength="80" placeholder="Ej. sueldo mayo, pago cliente, adelanto">
+            </label>
+            <button type="submit" id="guardarSueldo">Guardar sueldo</button>
+            <button type="button" class="ghost-button" id="cancelarSueldo">Cancelar edicion</button>
+          </form>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Ahorro manual</h3>
+              <p>Aportes o retiros directos de la caja personal.</p>
+            </div>
+          </div>
+          <form id="ahorroForm" class="data-form">
+            <label>
+              Monto
+              <input id="montoAhorro" type="number" min="0.1" step="0.1" placeholder="S/ 100">
+            </label>
+            <div class="form-row">
+              <label>
+                Tipo
+                <select id="tipoAhorro">
+                  <option value="aporte">Aporte</option>
+                  <option value="retiro">Retiro</option>
+                </select>
+              </label>
+              <label>
+                Nota
+                <input id="notaAhorro" type="text" maxlength="80" placeholder="Ej. ahorro de utilidad">
+              </label>
+            </div>
+            <button type="submit">Registrar ahorro</button>
+          </form>
+        </article>
+      </section>
+
+      <section class="history-grid">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Ingresos de servicios</h3>
+              <p>Pagos manuales guardados en la base de datos.</p>
+            </div>
+          </div>
+          <ul id="listaIngresos" class="activity-list editable"></ul>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Gastos e inversiones</h3>
+              <p>Editables y guardados en la base de datos.</p>
+            </div>
+          </div>
+          <ul id="listaGastos" class="activity-list editable"></ul>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Ingresos extra</h3>
+              <p>Adicionales sumados a producto, servicio o general.</p>
+            </div>
+          </div>
+          <ul id="listaExtras" class="activity-list editable"></ul>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Sueldos y repartos</h3>
+              <p>Historial de pagos administrados.</p>
+            </div>
+          </div>
+          <ul id="listaSueldos" class="activity-list editable"></ul>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Ahorros</h3>
+              <p>Movimientos de caja personal.</p>
+            </div>
+          </div>
+          <ul id="listaAhorros" class="activity-list"></ul>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
