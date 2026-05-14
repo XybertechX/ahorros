@@ -92,8 +92,7 @@ a {
 }
 
 .period-tabs,
-.target-panel,
-.month-report {
+.target-panel {
   display: grid;
   gap: 10px;
 }
@@ -119,30 +118,6 @@ a {
 .period-tabs button.active {
   color: #14211c;
   background: #d8f36d;
-}
-
-.month-report {
-  margin-top: 12px;
-  padding: 14px;
-  background: rgba(255, 255, 255, 0.07);
-  border-radius: 8px;
-}
-
-.month-report label {
-  color: #c9d8ce;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.month-report input {
-  width: 100%;
-  min-height: 44px;
-  padding: 0 12px;
-  color: #14211c;
-  background: #fffdf8;
-  border: 0;
-  border-radius: 8px;
-  font-weight: 800;
 }
 
 .target-panel {

@@ -44,15 +44,13 @@ const state = {
   gastos: [],
   sueldos: [],
   ahorros: [],
-  periodo: "today",
-  reporteMes: new Date().toISOString().slice(0, 7)
+  periodo: "today"
 };
 
 const refs = {
   conexionEstado: $("#conexionEstado"),
   metaInput: $("#metaInput"),
   guardarMeta: $("#guardarMeta"),
-  reporteMes: $("#reporteMes"),
   gananciaLimpia: $("#gananciaLimpia"),
   ventasTotal: $("#ventasTotal"),
   gastosTotal: $("#gastosTotal"),
@@ -185,14 +183,9 @@ function enPeriodo(fecha, periodo = state.periodo) {
   if (fecha && typeof fecha === "object" && fecha.fechaClave) {
     const hoyClave = fechaISO();
     const mesActual = claveMesActual();
-    const mesReporte = state.reporteMes || mesActual;
-
     if (periodo === "today") return fecha.fechaClave === hoyClave;
     if (periodo === "month") {
       return fecha.fechaClave.startsWith(mesActual) && fecha.fechaClave >= inicioMesClave(mesActual);
-    }
-    if (periodo === "report") {
-      return fecha.fechaClave.startsWith(mesReporte) && fecha.fechaClave >= inicioMesClave(mesReporte);
     }
 
     return fecha.fechaClave >= REPORT_START_KEY;
@@ -1044,15 +1037,6 @@ function registrarEventos() {
     });
   });
 
-  refs.reporteMes.addEventListener("change", () => {
-    state.reporteMes = refs.reporteMes.value || claveMesActual();
-    state.periodo = "report";
-    $$(".period-tabs button").forEach((item) => {
-      item.classList.toggle("active", item.dataset.period === "report");
-    });
-    renderResumen();
-  });
-
   refs.guardarMeta.addEventListener("click", () => {
     localStorage.setItem(META_KEY, refs.metaInput.value || "0");
     renderResumen();
@@ -1164,7 +1148,6 @@ function registrarEventos() {
 }
 
 refs.metaInput.value = localStorage.getItem(META_KEY) || "5000";
-refs.reporteMes.value = state.reporteMes;
 refs.ingresoFecha.value = fechaISO();
 refs.gastoFecha.value = fechaISO();
 refs.sueldoFecha.value = fechaISO();
