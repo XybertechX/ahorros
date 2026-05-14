@@ -31,7 +31,7 @@ const COLLECTIONS = {
   ahorros: "finanzas_ahorros",
   reportes: "finanzas_reportes_mensuales"
 };
-const REPORT_START_KEY = "2026-05-12";
+const REPORT_START_KEY = "2026-05-14";
 const REPORT_START_MONTH = REPORT_START_KEY.slice(0, 7);
 
 const $ = (selector) => document.querySelector(selector);
