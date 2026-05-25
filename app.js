@@ -162,6 +162,8 @@ function esServicioTecnico(venta) {
     || texto.includes("tecnico")
     || texto.includes("técnico")
     || texto.includes("program")
+    || texto.includes("office")
+    || texto.includes("antivirus")
     || texto.includes("mantenimiento")
     || texto.includes("pasta")
     || texto.includes("repar")
@@ -286,7 +288,7 @@ function resumen() {
 
   totals.servicioReinversion = totals.servicioIngresos * 0.27;
   totals.servicioMateriales = totals.servicioIngresos * 0.27;
-  totals.servicioLiquido = totals.servicioIngresos * 0.46;
+  totals.servicioLiquido = totals.servicioIngresos * 0.47;
   totals.utilidadVentas = totals.productoGanancia + totals.servicioIngresos;
   totals.disponible = totals.productoGanancia + totals.servicioIngresos + totals.ingresosExtra - totals.gastos;
   return { totals, ventas, movimientos };
