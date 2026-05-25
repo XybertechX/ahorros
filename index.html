@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#10241d">
+  <meta name="theme-color" content="#10172a">
   <title>Ahorros XyberTechX</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="manifest" href="manifest.json">
@@ -44,9 +44,9 @@
     <section class="content">
       <header class="hero">
         <div>
-          <span class="eyebrow">Caja diaria + ventas del sistema</span>
-          <h2>Control de ahorros</h2>
-          <p>Registra efectivo desde el celular, revisa tus ventas de XyberTechX y mira cuanto tienes disponible sin mezclar cuentas.</p>
+          <span class="eyebrow">Inventario, servicio tecnico e ingresos extra</span>
+          <h2>Control financiero XyberTechX</h2>
+          <p>Tres bolsillos claros: productos con costo y ganancia, servicios con reparto 27/27/46 e ingresos extra que registres desde celular o laptop.</p>
         </div>
         <a class="report-link" href="/xybertechx-system/reportes.html">Ventas</a>
       </header>
@@ -73,6 +73,42 @@
           <span>Ventas sistema</span>
           <strong>S/ <b id="ventasTotal">0.00</b></strong>
           <small id="ventasDetalle">0 ventas leidas</small>
+        </article>
+      </section>
+
+      <section class="business-grid">
+        <article class="business-card product-card">
+          <div>
+            <span>Productos de inventario</span>
+            <strong>S/ <b id="productoGanancia">0.00</b></strong>
+            <small>Ganancia real: venta menos inversion</small>
+          </div>
+          <dl>
+            <div><dt>Vendido</dt><dd>S/ <b id="productoVendido">0.00</b></dd></div>
+            <div><dt>Inversion</dt><dd>S/ <b id="productoInversion">0.00</b></dd></div>
+          </dl>
+        </article>
+        <article class="business-card service-card">
+          <div>
+            <span>Servicio tecnico</span>
+            <strong>S/ <b id="servicioIngresos">0.00</b></strong>
+            <small>Reparto automatico del ingreso tecnico</small>
+          </div>
+          <dl>
+            <div><dt>Taller 27%</dt><dd>S/ <b id="servicioReinversion">0.00</b></dd></div>
+            <div><dt>Materiales 27%</dt><dd>S/ <b id="servicioMateriales">0.00</b></dd></div>
+            <div><dt>Liquido 46%</dt><dd>S/ <b id="servicioLiquido">0.00</b></dd></div>
+          </dl>
+        </article>
+        <article class="business-card extra-card">
+          <div>
+            <span>Ingresos extra</span>
+            <strong>S/ <b id="extraIngresos">0.00</b></strong>
+            <small>Plata que entra por otros motivos</small>
+          </div>
+          <dl>
+            <div><dt>Movimientos</dt><dd><b id="extraCantidad">0</b></dd></div>
+          </dl>
         </article>
       </section>
 
@@ -157,8 +193,9 @@
               <label>
                 Categoria
                 <select id="categoriaInput">
-                  <option>Cliente</option>
-                  <option>Venta extra</option>
+                  <option>Ingreso extra</option>
+                  <option>Servicio tecnico</option>
+                  <option>Producto inventario</option>
                   <option>Comida</option>
                   <option>Pasaje</option>
                   <option>Materiales</option>
@@ -180,7 +217,7 @@
           <div class="panel-head">
             <div>
               <h3>En tu celular</h3>
-              <p>Abre esta pagina en Chrome y usa “Agregar a pantalla principal”. Se guarda en Firebase, asi lo ves tambien en laptop.</p>
+              <p>Abre esta pagina en Chrome y usa Agregar a pantalla principal. Se guarda en Firebase, asi lo ves tambien en laptop.</p>
             </div>
           </div>
           <button id="instalarApp" class="install-button" type="button">Instalar acceso</button>

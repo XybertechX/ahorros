@@ -50,6 +50,15 @@ const refs = {
   gastosTotal: $("#gastosTotal"),
   ventasTotal: $("#ventasTotal"),
   ventasDetalle: $("#ventasDetalle"),
+  productoGanancia: $("#productoGanancia"),
+  productoVendido: $("#productoVendido"),
+  productoInversion: $("#productoInversion"),
+  servicioIngresos: $("#servicioIngresos"),
+  servicioReinversion: $("#servicioReinversion"),
+  servicioMateriales: $("#servicioMateriales"),
+  servicioLiquido: $("#servicioLiquido"),
+  extraIngresos: $("#extraIngresos"),
+  extraCantidad: $("#extraCantidad"),
   efectivoTotal: $("#efectivoTotal"),
   digitalTotal: $("#digitalTotal"),
   bancoTotal: $("#bancoTotal"),
@@ -139,6 +148,34 @@ function ventaValida(venta) {
   return venta.estado !== "devuelta";
 }
 
+function esServicioTecnico(venta) {
+  const productos = venta.productos || [];
+  const texto = [
+    venta.cliente,
+    venta.nota,
+    venta.observacion,
+    venta.comentario,
+    ...productos.flatMap((producto) => [producto.nombre, producto.categoria])
+  ].join(" ").toLowerCase();
+
+  return texto.includes("servicio")
+    || texto.includes("tecnico")
+    || texto.includes("técnico")
+    || texto.includes("program")
+    || texto.includes("mantenimiento")
+    || texto.includes("pasta")
+    || texto.includes("repar")
+    || texto.includes("formate")
+    || texto.includes("instal")
+    || texto.includes("logo")
+    || texto.includes("banner")
+    || productos.every((producto) => Number(producto.costo || 0) === 0);
+}
+
+function categoriaNormalizada(categoria = "") {
+  return categoria.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
 function costoVenta(venta) {
   return (venta.productos || []).reduce((sum, producto) => {
     const cantidad = Number(producto.cantidad || 0);
@@ -176,8 +213,19 @@ function resumen() {
   const movimientos = state.movimientos.filter(enPeriodo);
   const totals = {
     ingresosManual: 0,
+    ingresosExtra: 0,
+    ingresosServicioManual: 0,
+    ingresosProductoManual: 0,
     utilidadVentas: 0,
     totalVentas: 0,
+    productoVendido: 0,
+    productoInversion: 0,
+    productoGanancia: 0,
+    servicioIngresos: 0,
+    servicioReinversion: 0,
+    servicioMateriales: 0,
+    servicioLiquido: 0,
+    extraCantidad: 0,
     gastos: 0,
     disponible: 0,
     efectivo: 0,
@@ -192,18 +240,43 @@ function resumen() {
 
   ventas.forEach((venta) => {
     const utilidad = utilidadVenta(venta);
-    totals.utilidadVentas += utilidad;
     totals.totalVentas += Number(venta.total || 0);
-    sumar(totals, metodoNormalizado(venta.metodoPago), utilidad);
+
+    if (esServicioTecnico(venta)) {
+      const total = Number(venta.total || 0);
+      totals.servicioIngresos += total;
+      sumar(totals, metodoNormalizado(venta.metodoPago), total);
+    } else {
+      const total = Number(venta.total || 0);
+      const costo = costoVenta(venta);
+      totals.productoVendido += total;
+      totals.productoInversion += costo;
+      totals.productoGanancia += utilidad;
+      sumar(totals, metodoNormalizado(venta.metodoPago), utilidad);
+    }
   });
 
   movimientos.forEach((movimiento) => {
     const monto = Number(movimiento.monto || 0);
     const signo = movimiento.tipo === "gasto" ? -1 : 1;
     const firmado = monto * signo;
+    const categoria = categoriaNormalizada(movimiento.categoria);
 
     if (movimiento.tipo === "gasto") totals.gastos += monto;
-    else totals.ingresosManual += monto;
+    else {
+      totals.ingresosManual += monto;
+      if (categoria.includes("servicio tecnico")) {
+        totals.ingresosServicioManual += monto;
+        totals.servicioIngresos += monto;
+      } else if (categoria.includes("producto inventario")) {
+        totals.ingresosProductoManual += monto;
+        totals.productoVendido += monto;
+        totals.productoGanancia += monto;
+      } else {
+        totals.ingresosExtra += monto;
+        totals.extraCantidad += 1;
+      }
+    }
 
     sumar(totals, metodoNormalizado(movimiento.metodo), firmado);
     if (movimiento.bolsillo && movimiento.bolsillo !== "libre") {
@@ -211,7 +284,11 @@ function resumen() {
     }
   });
 
-  totals.disponible = totals.ingresosManual + totals.utilidadVentas - totals.gastos;
+  totals.servicioReinversion = totals.servicioIngresos * 0.27;
+  totals.servicioMateriales = totals.servicioIngresos * 0.27;
+  totals.servicioLiquido = totals.servicioIngresos * 0.46;
+  totals.utilidadVentas = totals.productoGanancia + totals.servicioIngresos;
+  totals.disponible = totals.productoGanancia + totals.servicioIngresos + totals.ingresosExtra - totals.gastos;
   return { totals, ventas, movimientos };
 }
 
@@ -221,11 +298,20 @@ function renderCards() {
   const avance = meta > 0 ? Math.max(0, Math.min((totals.disponible / meta) * 100, 100)) : 0;
 
   refs.totalDisponible.textContent = dinero(totals.disponible);
-  refs.balanceDetalle.textContent = `Manual S/${dinero(totals.ingresosManual)} + ventas S/${dinero(totals.utilidadVentas)} - gastos S/${dinero(totals.gastos)}`;
-  refs.ingresosTotal.textContent = dinero(totals.ingresosManual + totals.utilidadVentas);
+  refs.balanceDetalle.textContent = `Productos S/${dinero(totals.productoGanancia)} + servicios S/${dinero(totals.servicioIngresos)} + extras S/${dinero(totals.ingresosExtra)} - gastos S/${dinero(totals.gastos)}`;
+  refs.ingresosTotal.textContent = dinero(totals.productoGanancia + totals.servicioIngresos + totals.ingresosExtra);
   refs.gastosTotal.textContent = dinero(totals.gastos);
   refs.ventasTotal.textContent = dinero(totals.totalVentas);
   refs.ventasDetalle.textContent = `${totals.ventasCount} ventas leidas`;
+  refs.productoGanancia.textContent = dinero(totals.productoGanancia);
+  refs.productoVendido.textContent = dinero(totals.productoVendido);
+  refs.productoInversion.textContent = dinero(totals.productoInversion);
+  refs.servicioIngresos.textContent = dinero(totals.servicioIngresos);
+  refs.servicioReinversion.textContent = dinero(totals.servicioReinversion);
+  refs.servicioMateriales.textContent = dinero(totals.servicioMateriales);
+  refs.servicioLiquido.textContent = dinero(totals.servicioLiquido);
+  refs.extraIngresos.textContent = dinero(totals.ingresosExtra);
+  refs.extraCantidad.textContent = totals.extraCantidad;
   refs.efectivoTotal.textContent = dinero(totals.efectivo);
   refs.digitalTotal.textContent = dinero(totals.digital);
   refs.bancoTotal.textContent = dinero(totals.banco);

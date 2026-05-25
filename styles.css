@@ -1,15 +1,19 @@
 :root {
-  --ink: #11221c;
-  --muted: #5c6c63;
-  --paper: #fffdf8;
-  --soft: #efe9dc;
-  --line: #d8d0c0;
-  --dark: #10241d;
-  --green: #168457;
-  --lime: #d8f36d;
-  --blue: #2c6f95;
-  --red: #bd3f35;
-  --shadow: 0 20px 50px rgba(34, 45, 38, 0.14);
+  --ink: #111827;
+  --muted: #5b6475;
+  --paper: #fbfcff;
+  --soft: #edf2f7;
+  --line: #d9e2ec;
+  --dark: #10172a;
+  --green: #10b7c9;
+  --lime: #f5b84b;
+  --cyan: #10b7c9;
+  --amber: #f5b84b;
+  --blue: #6d5dfc;
+  --red: #cf3f4b;
+  --mint: #31c48d;
+  --coral: #ef6b5b;
+  --shadow: 0 22px 54px rgba(30, 41, 59, 0.14);
 }
 
 * {
@@ -21,8 +25,9 @@ body {
   min-height: 100vh;
   color: var(--ink);
   background:
-    radial-gradient(circle at top right, rgba(216, 243, 109, 0.25), transparent 34rem),
-    linear-gradient(135deg, #f9f5eb 0%, #e5eee8 55%, #f5f7f0 100%);
+    radial-gradient(circle at top right, rgba(16, 183, 201, 0.22), transparent 34rem),
+    radial-gradient(circle at top left, rgba(245, 184, 75, 0.18), transparent 28rem),
+    linear-gradient(135deg, #f8fafc 0%, #eaf1f8 56%, #f7f7fb 100%);
   font-family: Inter, Arial, sans-serif;
 }
 
@@ -65,7 +70,7 @@ button {
   height: 52px;
   place-items: center;
   color: var(--dark);
-  background: var(--lime);
+  background: linear-gradient(135deg, var(--cyan), var(--amber));
   border-radius: 14px;
   font-size: 20px;
   font-weight: 900;
@@ -121,7 +126,7 @@ button {
 
 .period-tabs button.active {
   color: var(--dark);
-  background: var(--lime);
+  background: var(--amber);
 }
 
 .goal-card,
@@ -167,7 +172,7 @@ button {
 .money-form button,
 .install-button {
   color: #fff;
-  background: var(--green);
+  background: linear-gradient(135deg, var(--blue), var(--green));
 }
 
 .sync-card {
@@ -189,7 +194,7 @@ button {
 }
 
 .eyebrow {
-  color: var(--green);
+  color: var(--blue);
 }
 
 .hero h2 {
@@ -216,6 +221,7 @@ button {
 }
 
 .overview,
+.business-grid,
 .wallet-grid,
 .work-area,
 .history-grid {
@@ -232,6 +238,11 @@ button {
   margin-top: 16px;
 }
 
+.business-grid {
+  grid-template-columns: 1fr 1.35fr 1fr;
+  margin-top: 16px;
+}
+
 .work-area {
   grid-template-columns: 1.35fr 0.65fr;
   margin-top: 16px;
@@ -244,6 +255,7 @@ button {
 
 .overview article,
 .wallet-grid article,
+.business-card,
 .panel {
   background: rgba(255, 253, 248, 0.92);
   border: 1px solid var(--line);
@@ -252,13 +264,15 @@ button {
 }
 
 .overview article,
-.wallet-grid article {
+.wallet-grid article,
+.business-card {
   min-height: 144px;
   padding: 22px;
 }
 
 .overview span,
-.wallet-grid span {
+.wallet-grid span,
+.business-card span {
   color: #38544b;
   font-size: 13px;
   font-weight: 900;
@@ -266,7 +280,8 @@ button {
 }
 
 .overview strong,
-.wallet-grid strong {
+.wallet-grid strong,
+.business-card strong {
   display: block;
   margin-top: 12px;
   font-size: clamp(28px, 4vw, 54px);
@@ -274,7 +289,8 @@ button {
 }
 
 .overview small,
-.wallet-grid small {
+.wallet-grid small,
+.business-card small {
   display: block;
   margin-top: 10px;
   color: var(--muted);
@@ -284,7 +300,7 @@ button {
 
 .main-balance {
   color: #fff;
-  background: linear-gradient(135deg, #123b2e, #145541) !important;
+  background: linear-gradient(135deg, #10172a, #2447a8) !important;
 }
 
 .main-balance span,
@@ -293,7 +309,82 @@ button {
 }
 
 .main-balance strong {
-  color: var(--lime);
+  color: #bff7ff;
+}
+
+.business-card {
+  display: grid;
+  gap: 18px;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+}
+
+.business-card::after {
+  content: "";
+  position: absolute;
+  top: -54px;
+  right: -54px;
+  width: 150px;
+  height: 150px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.business-card > div,
+.business-card dl {
+  position: relative;
+  z-index: 1;
+}
+
+.business-card span,
+.business-card small {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.business-card strong {
+  color: #fff;
+}
+
+.business-card dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.service-card dl {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.business-card dl div {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+}
+
+.business-card dt {
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.business-card dd {
+  margin: 6px 0 0;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.product-card {
+  background: linear-gradient(135deg, #2447a8, #10b7c9) !important;
+}
+
+.service-card {
+  background: linear-gradient(135deg, #6d5dfc, #ef6b5b) !important;
+}
+
+.extra-card {
+  background: linear-gradient(135deg, #0f8f75, #f5b84b) !important;
 }
 
 .danger {
@@ -377,7 +468,7 @@ button {
 }
 
 .install-panel {
-  background: #112c23;
+  background: #111827;
   color: #f4fff8;
 }
 
@@ -430,7 +521,7 @@ button {
 }
 
 .positive {
-  color: var(--green);
+  color: var(--mint);
 }
 
 .negative {
@@ -483,6 +574,7 @@ button {
   }
 
   .overview,
+  .business-grid,
   .wallet-grid,
   .work-area,
   .history-grid {
@@ -514,6 +606,7 @@ button {
   }
 
   .overview,
+  .business-grid,
   .wallet-grid,
   .work-area,
   .history-grid,
@@ -523,6 +616,7 @@ button {
 
   .overview article,
   .wallet-grid article,
+  .business-card,
   .panel {
     padding: 18px;
   }
