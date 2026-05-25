@@ -1,0 +1,18 @@
+{
+  "name": "Ahorros XyberTechX",
+  "short_name": "Ahorros",
+  "description": "Control diario de ahorros, ingresos y ventas XyberTechX.",
+  "start_url": "/ahorros/",
+  "scope": "/ahorros/",
+  "display": "standalone",
+  "background_color": "#f9f5eb",
+  "theme_color": "#10241d",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
