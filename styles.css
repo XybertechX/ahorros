@@ -457,6 +457,22 @@ button {
   font-weight: 800;
 }
 
+.form-status {
+  min-height: 22px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.form-status.success {
+  color: var(--mint);
+}
+
+.form-status.error {
+  color: var(--red);
+}
+
 .ghost-button {
   display: none;
   color: var(--dark) !important;

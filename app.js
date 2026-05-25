@@ -76,6 +76,7 @@ const refs = {
   fechaInput: $("#fechaInput"),
   guardarMovimiento: $("#guardarMovimiento"),
   cancelarEdicion: $("#cancelarEdicion"),
+  formEstado: $("#formEstado"),
   instalarApp: $("#instalarApp"),
   listaMovimientos: $("#listaMovimientos"),
   listaVentas: $("#listaVentas")
@@ -400,6 +401,9 @@ function resetForm() {
   refs.movimientoId.value = "";
   refs.fechaInput.value = fechaISO();
   refs.guardarMovimiento.textContent = "Guardar movimiento";
+  refs.guardarMovimiento.disabled = false;
+  refs.formEstado.textContent = "";
+  refs.formEstado.className = "form-status";
   refs.movimientoForm.classList.remove("editing");
 }
 
@@ -418,16 +422,25 @@ function editarMovimiento(movimiento) {
 }
 
 async function eliminarMovimiento(id) {
-  await deleteDoc(doc(db, COLLECTIONS.movimientos, id));
-  state.movimientos = state.movimientos.filter((item) => item.id !== id);
-  renderCards();
+  try {
+    await deleteDoc(doc(db, COLLECTIONS.movimientos, id));
+    state.movimientos = state.movimientos.filter((item) => item.id !== id);
+    renderCards();
+  } catch (error) {
+    refs.conexionEstado.textContent = "Firebase no permitio borrar el movimiento.";
+    console.error(error);
+  }
 }
 
 async function guardarMovimiento(event) {
   event.preventDefault();
   const monto = Number(refs.montoInput.value || 0);
   const concepto = refs.conceptoInput.value.trim();
-  if (monto <= 0 || !concepto) return;
+  if (monto <= 0 || !concepto) {
+    refs.formEstado.textContent = "Completa concepto y monto.";
+    refs.formEstado.className = "form-status error";
+    return;
+  }
 
   const data = {
     concepto,
@@ -440,17 +453,32 @@ async function guardarMovimiento(event) {
     actualizadoEn: new Date().toISOString()
   };
 
-  if (refs.movimientoId.value) {
-    await updateDoc(doc(db, COLLECTIONS.movimientos, refs.movimientoId.value), data);
-  } else {
-    await addDoc(collection(db, COLLECTIONS.movimientos), {
-      ...data,
-      creadoEn: new Date().toISOString()
-    });
-  }
+  refs.guardarMovimiento.disabled = true;
+  refs.guardarMovimiento.textContent = "Guardando...";
+  refs.formEstado.textContent = "Guardando en Firebase...";
+  refs.formEstado.className = "form-status";
 
-  resetForm();
-  await cargarTodo();
+  try {
+    if (refs.movimientoId.value) {
+      await updateDoc(doc(db, COLLECTIONS.movimientos, refs.movimientoId.value), data);
+    } else {
+      await addDoc(collection(db, COLLECTIONS.movimientos), {
+        ...data,
+        creadoEn: new Date().toISOString()
+      });
+    }
+
+    resetForm();
+    refs.formEstado.textContent = "Movimiento guardado.";
+    refs.formEstado.className = "form-status success";
+    await cargarTodo();
+  } catch (error) {
+    refs.guardarMovimiento.disabled = false;
+    refs.guardarMovimiento.textContent = refs.movimientoId.value ? "Actualizar movimiento" : "Guardar movimiento";
+    refs.formEstado.textContent = "Firebase no permitio guardar. Revisa reglas de Firestore.";
+    refs.formEstado.className = "form-status error";
+    console.error(error);
+  }
 }
 
 async function cargarTodo() {
